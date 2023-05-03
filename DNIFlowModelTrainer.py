@@ -17,6 +17,7 @@ DNI_REAL =  DATA['DNIreal'].astype(float).values
 T_IN =  DATA['TIN'].astype(float).values 
 T_OUT =  DATA['TOUT'].astype(float).values 
 DELTA_T =  DATA['DeltaT'].astype(float).values 
+DELTA_T = np.clip(DELTA_T, a_min=0, a_max=None)
 JP_FX =  DATA['JP_Fx'].astype(float).values   
 
 ##################################################################
@@ -24,10 +25,10 @@ JP_FX =  DATA['JP_Fx'].astype(float).values
 inputDataTrain = DNI_REAL 
  
 # Change value <T_OUT> to TRAIN MODEL: 
-weightTrain = T_OUT   
+weightTrain = DELTA_T   
  
 # Change value of "inputTest" to TEST MODEL:
-inputTest = 800   
+inputTest = 999   
 ##################################################################
    
 
@@ -50,7 +51,7 @@ result = model.predict(inputTest)
  
 # print results
 print('+++++++++++++++') 
-print('MODEL OUTPUT: ', result)
+print('MODEL OUTPUT: ', result) 
 print('+++++++++++++++') 
  
 # simple linear regresion for check
