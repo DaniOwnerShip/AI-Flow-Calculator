@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
  
 # data csv columns:  Flow	PressureIN	DNIraw	DNIreal	TIN	TOUT	DeltaT	JP_Fx 
-DATA = pd.read_csv('./Data/dataCS.csv', delimiter=';', na_values=['NaN'])
+DATA = pd.read_csv('./dataCS.csv', delimiter=';', na_values=['NaN'])
 
 # predict value
 FLOW_SF =  DATA['Flow'].astype(float).values.reshape(-1, 1) 
