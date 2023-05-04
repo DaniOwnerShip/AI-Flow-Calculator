@@ -22,10 +22,10 @@ JP_FX =  DATA['JP_Fx'].astype(float).values
  
 
 ##################################################################  
-#INDEX csv: Time | Flow | PressureIN | DNIraw | DNIreal | TIN | TOUT | DeltaT | JP_Fx
+#INDEX csv: 'Time' | 'Flow' | 'PressureIN' | 'DNIraw' | 'DNIreal' | 'TIN' | 'TOUT' | 'DeltaT' | 'JP_Fx'
 
 #Change name of rows to test model 
-inputDataTrain = DATA[['DNIreal', 'TOUT', 'TIN', 'DeltaT', 'DNIraw', 'PressureIN', 'JP_Fx']]     # <=== CHANGE THIS VALUE. colums number can be change too
+inputDataTrain = DATA[['DNIreal', 'TOUT',  'JP_Fx']]     # <=== CHANGE THIS VALUE. colums number can be change too
 
 #select the column of Data Test file to test. must be the same order like Data Train
 #in this case Test data are data of Train data:
@@ -75,15 +75,26 @@ print('---------------')
 print('coef :', model.coef_)
 print('intercept :', model.intercept_)   
 print('***************') 
+ 
 
+# xyplot  
+dni = np.array(DATA['DNIreal']).reshape(-1, 1) 
 
+fig, ax1 = plt.subplots(figsize=(18, 6))
 
-# Graphic plot  
-plt.figure(figsize=(18, 6))
-plt.plot(DATA['Time'], FLOW_SF, color='blue', linewidth=3)
-plt.plot(DATA['Time'], model.predict(inputDataTrain), color='red', linewidth=3) 
-plt.title('Caudal real vs Modelo')
-plt.xlabel('tiempo')
-plt.ylabel('caudal')
+ax1.plot(DATA['Time'], FLOW_SF, color='blue', linewidth=3)
+ax1.plot(DATA['Time'], model.predict(inputDataTrain), color='red', linewidth=3) 
+
+ax2 = ax1.twinx()
+ax2.plot(DATA['Time'], dni, color='yellow', linewidth=3)
+ax2.set_ylabel('DNI')
+
+ax1.set_title('Caudal real vs Modelo')
+ax1.set_xlabel('tiempo')
+ax1.set_ylabel('caudal')
+
+ax1.set_xticks(DATA['Time'][::30])
+
 plt.show()
+
  
