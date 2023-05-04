@@ -30,7 +30,7 @@ inputDataTrain = DATA[['DNIreal', 'TOUT', 'TIN', 'DeltaT', 'DNIraw', 'PressureIN
 #in this case Test data are data of Train data:
 
 #row of ./dataCS.csv
-rowTest = 356 # <=== CHANGE THIS VALUE   
+rowTest = 385 # <=== CHANGE THIS VALUE   
 
 rowTest = rowTest + 2 # just to match row of ./dataCS.csv (header + start 1)  
 
@@ -59,12 +59,12 @@ model.fit(inputDataTrain.values, FLOW_SF, sample_weight=weightTrain)
 # reshape dataTest to 2D matrix
 dataTest = inputDataTrain.iloc[rowTest].to_numpy().astype(float).reshape(1, -1) 
 
-# calculate result
+# calculate result. is using data train..
 result = model.predict(dataTest)
- 
 
-difTestTranin =  result - flowTraining
-  
+difTestTranin =  result - flowTraining  
+
+
 # print results
 print('---------------') 
 print("OUTPUT FLOW =>> {:.2f}".format(result.flatten()[0])) 
@@ -77,5 +77,12 @@ print('***************')
 
 
 
-
+# Graphic plot  
+plt.figure(figsize=(18, 6))
+plt.plot(DATA['Time'], FLOW_SF, color='blue', linewidth=3)
+plt.plot(DATA['Time'], model.predict(inputDataTrain), color='red', linewidth=3) 
+plt.title('Caudal real vs Modelo')
+plt.xlabel('tiempo')
+plt.ylabel('caudal')
+plt.show()
  
