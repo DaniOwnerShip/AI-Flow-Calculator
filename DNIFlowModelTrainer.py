@@ -23,24 +23,28 @@ JP_FX =  DATA['JP_Fx'].astype(float).values
 
 ##################################################################  
 
-#Change name of rows to test model
-inputDataTrain = DATA[['DNIreal', 'TOUT', 'JP_Fx', 'DeltaT', 'PressureIN']]    
+#Change name of rows to test model 
+inputDataTrain = DATA[['DNIreal', 'TOUT', 'TIN', 'DeltaT', 'DNIraw', 'PressureIN', 'JP_Fx']]     # <=== CHANGE THIS VALUE. colums number can be change too
 
 #select the column of Data Test file to test. must be the same order like Data Train
 #in this case Test data are data of Train data:
 
-rowTest = 356 # <=== CHANGE THIS VALUE  
+#row of ./dataCS.csv
+rowTest = 356 # <=== CHANGE THIS VALUE   
 
-rowTest = rowTest + 2 #add 2 row (header + start 1) to match row of ./dataCS.csv
+rowTest = rowTest + 2 # just to match row of ./dataCS.csv (header + start 1)  
 
-# print data
+# print data 
+print('***************') 
 print(inputDataTrain.shape)
 print(inputDataTrain.iloc[rowTest].values)
-  
-dataTest = inputDataTrain.iloc[rowTest].to_numpy().astype(float).reshape(1, -1)
-
+flowTraining = DATA['Flow'][rowTest]
+print('Flow training => ', flowTraining)
+print('DNIe  training=> ', DATA['DNIreal'][rowTest])
+ 
 #weight variable
-weightTrain =  JP_FX # no effect = None
+# no effect = None
+weightTrain =  JP_FX  # <=== CHANGE THIS VALUE  
  
 ##################################################################
     
@@ -52,13 +56,20 @@ model = LinearRegression()
 model.fit(inputDataTrain.values, FLOW_SF, sample_weight=weightTrain)
 
 
-# calculate result   
-result = model.predict(dataTest)
+# reshape dataTest to 2D matrix
+dataTest = inputDataTrain.iloc[rowTest].to_numpy().astype(float).reshape(1, -1) 
 
+# calculate result
+result = model.predict(dataTest)
  
+
+difTestTranin =  result - flowTraining
+  
 # print results
-print('***************') 
-print('MODEL OUTPUT: ', result)  
+print('---------------') 
+print("OUTPUT FLOW =>> {:.2f}".format(result.flatten()[0])) 
+print('---------------') 
+print("Test VS Train => {:.2f}".format(difTestTranin.flatten()[0])) 
 print('---------------') 
 print('coef :', model.coef_)
 print('intercept :', model.intercept_)   
