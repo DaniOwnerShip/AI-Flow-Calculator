@@ -9,7 +9,7 @@ DATA = pd.read_csv('./dataCS.csv', delimiter=';', na_values=['NaN'])
 # predict value
 FLOW_SF =  DATA['Flow'].astype(float).values.reshape(-1, 1) 
 
-# predictor values  
+# use for test weight variable model
 PREASSURE_IN =  DATA['PressureIN'].astype(float).values 
 DNI_RAW =  DATA['DNIraw'].astype(float).values 
 DNI_RAW = np.clip(DNI_RAW, a_min=0, a_max=None)
@@ -22,6 +22,7 @@ JP_FX =  DATA['JP_Fx'].astype(float).values
  
 
 ##################################################################  
+#INDEX csv: Time | Flow | PressureIN | DNIraw | DNIreal | TIN | TOUT | DeltaT | JP_Fx
 
 #Change name of rows to test model 
 inputDataTrain = DATA[['DNIreal', 'TOUT', 'TIN', 'DeltaT', 'DNIraw', 'PressureIN', 'JP_Fx']]     # <=== CHANGE THIS VALUE. colums number can be change too
